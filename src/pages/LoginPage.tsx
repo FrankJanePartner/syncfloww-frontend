@@ -26,11 +26,11 @@ const LoginPage = ({ onLogin, onSignupClick }: LoginPageProps) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Urban Trend
-          </span>
-        </div>
+          <div className="text-center mb-8">
+            <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              SyncFlow
+            </span>
+          </div>
 
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">

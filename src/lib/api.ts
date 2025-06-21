@@ -54,5 +54,5 @@ export const buildApiUrl = (endpoint: string, params?: Record<string, string>) =
 
 // Example usage:
 // buildApiUrl(API_CONFIG.ENDPOINTS.POSTS.UPDATE, { id: '123' })
-// Results in: https://api.urbantrend.com/posts/123
+// Results in: https://api.syncflow.com/posts/123
 

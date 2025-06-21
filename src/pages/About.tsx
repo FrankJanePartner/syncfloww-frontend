@@ -14,7 +14,7 @@ const About = () => {
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
             About{" "}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Urban Trend
+              SyncFlow
             </span>
           </h1>
           <p className="text-xl text-gray-600 leading-relaxed">
@@ -96,7 +96,7 @@ const About = () => {
           
           <div className="max-w-4xl mx-auto">
             <p className="text-lg text-gray-600 mb-6">
-              Founded in 2024, Urban Trend emerged from a simple observation: businesses were spending countless hours on social media management tasks that could be automated, while struggling to extract meaningful insights from their social media data.
+              Founded in 2024, SyncFlow emerged from a simple observation: businesses were spending countless hours on social media management tasks that could be automated, while struggling to extract meaningful insights from their social media data.
             </p>
             <p className="text-lg text-gray-600 mb-6">
               Our founding team, with backgrounds in AI research, digital marketing, and user experience design, came together with a shared vision of creating a platform that would not just automate social media tasks, but intelligently optimize them.
@@ -115,7 +115,7 @@ const About = () => {
             Ready to Transform Your Social Media?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Join thousands of businesses already using Urban Trend to grow their social media presence.
+            Join thousands of businesses already using SyncFlow to grow their social media presence.
           </p>
           <Link to="/">
             <Button className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all">
