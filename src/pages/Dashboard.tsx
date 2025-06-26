@@ -5,8 +5,10 @@ import Sidebar from "@/components/Sidebar";
 import StatsCard from "@/components/StatsCard";
 import WorkflowCard from "@/components/WorkflowCard";
 import BrandSetup from "@/components/BrandSetup";
+import useSecureAuth from "../hooks/useSecureAuth";
 
 const Dashboard = () => {
+  const { user } = useSecureAuth();
   const [activeView, setActiveView] = useState("dashboard");
   const [showBrandSetup, setShowBrandSetup] = useState(false);
   const navigate = useNavigate();
@@ -43,107 +45,116 @@ const Dashboard = () => {
     );
   }
 
-  const renderDashboardContent = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome back, Samantha Lee!</h1>
-        <div className="flex items-center space-x-4">
-          <span className="text-sm text-gray-600">New Comments (Today)</span>
-          <span className="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium">45</span>
-          <span className="text-xs text-green-600">+15 vs. yesterday</span>
-        </div>
-      </div>
+  const renderDashboardContent = () => {
+    const fullName = user?.name || "";
+    const nameParts = fullName.split(" ");
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard
-          title="Total Followers"
-          value="15,231"
-          change="+12% vs. last month"
-          changeType="positive"
-        />
-        <StatsCard
-          title="Avg. Engagement Rate"
-          value="3.8%"
-          change="+0.5% vs. last month"
-          changeType="positive"
-        />
-        <StatsCard
-          title="Post Reach (Last 7 Days)"
-          value="87,500"
-          change="-5% vs. previous 7 days"
-          changeType="negative"
-        />
-        <StatsCard
-          title="New Comments (Today)"
-          value="45"
-          change="+15 vs. yesterday"
-          changeType="positive"
-        />
-      </div>
-
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">AI Chat Assistant</h2>
-          <button className="text-red-500 hover:text-red-600 text-sm">Delete</button>
-        </div>
-        <div className="bg-gray-50 rounded-lg p-8 text-center">
-          <p className="text-gray-500 mb-4">Ask anything</p>
-          <div className="flex items-center justify-center space-x-2">
-            <span className="text-2xl">💬</span>
-            <span className="text-2xl">🎯</span>
-            <span className="text-2xl">⬇️</span>
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Welcome back, {firstName} {lastName}!
+          </h1>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-gray-600">New Comments (Today)</span>
+            <span className="bg-gray-100 px-3 py-1 rounded-full text-sm font-medium">45</span>
+            <span className="text-xs text-green-600">+15 vs. yesterday</span>
           </div>
-          <div className="mt-4 space-y-2">
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatsCard
+            title="Total Followers"
+            value="15,231"
+            change="+12% vs. last month"
+            changeType="positive"
+          />
+          <StatsCard
+            title="Avg. Engagement Rate"
+            value="3.8%"
+            change="+0.5% vs. last month"
+            changeType="positive"
+          />
+          <StatsCard
+            title="Post Reach (Last 7 Days)"
+            value="87,500"
+            change="-5% vs. previous 7 days"
+            changeType="negative"
+          />
+          <StatsCard
+            title="New Comments (Today)"
+            value="45"
+            change="+15 vs. yesterday"
+            changeType="positive"
+          />
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">AI Chat Assistant</h2>
+            <button className="text-red-500 hover:text-red-600 text-sm">Delete</button>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-8 text-center">
+            <p className="text-gray-500 mb-4">Ask anything</p>
+            <div className="flex items-center justify-center space-x-2">
+              <span className="text-2xl">💬</span>
+              <span className="text-2xl">🎯</span>
+              <span className="text-2xl">⬇️</span>
+            </div>
+            <div className="mt-4 space-y-2">
+              <button 
+                onClick={() => navigate("/post-management")}
+                className="block w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50"
+              >
+                + Create Post
+              </button>
+              <button className="block w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50">
+                + New Brand
+              </button>
+              <button className="block w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50">
+                👥 Assign new members
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Social Media Overview</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-3xl mb-2">📷</div>
+              <p className="text-sm text-gray-600">Instagram</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">🐦</div>
+              <p className="text-sm text-gray-600">Twitter</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">📘</div>
+              <p className="text-sm text-gray-600">Facebook</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">💼</div>
+              <p className="text-sm text-gray-600">LinkedIn</p>
+            </div>
+          </div>
+          <p className="text-center text-sm text-gray-500 mt-4">
+            Connect more platforms to unlock full insights.
+          </p>
+          <div className="text-center mt-4">
             <button 
-              onClick={() => navigate("/post-management")}
-              className="block w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50"
+              onClick={() => navigate("/social-integration")}
+              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
             >
-              + Create Post
-            </button>
-            <button className="block w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50">
-              + New Brand
-            </button>
-            <button className="block w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50">
-              👥 Assign new members
+              Manage Social Accounts
             </button>
           </div>
         </div>
       </div>
-
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Social Media Overview</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="text-center">
-            <div className="text-3xl mb-2">📷</div>
-            <p className="text-sm text-gray-600">Instagram</p>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl mb-2">🐦</div>
-            <p className="text-sm text-gray-600">Twitter</p>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl mb-2">📘</div>
-            <p className="text-sm text-gray-600">Facebook</p>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl mb-2">💼</div>
-            <p className="text-sm text-gray-600">LinkedIn</p>
-          </div>
-        </div>
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Connect more platforms to unlock full insights.
-        </p>
-        <div className="text-center mt-4">
-          <button 
-            onClick={() => navigate("/social-integration")}
-            className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-          >
-            Manage Social Accounts
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderWorkflowsContent = () => (
     <div className="space-y-6">

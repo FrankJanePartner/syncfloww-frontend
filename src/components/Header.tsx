@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, Settings, User, Search } from "lucide-react";
+import { Bell, Settings, User, LogOut, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useSecureAuth from "../hooks/useSecureAuth";
 
 interface HeaderProps {
   onLoginClick?: () => void;
@@ -24,6 +25,14 @@ const Header = ({ onLoginClick, onSignupClick, isAuthenticated = false, showSear
     if (featuresSection) {
       featuresSection.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const { logout } = useSecureAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -108,6 +117,10 @@ const Header = ({ onLoginClick, onSignupClick, isAuthenticated = false, showSear
                     <DropdownMenuItem>
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Settings</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Logout</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

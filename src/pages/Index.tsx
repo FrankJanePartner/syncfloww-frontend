@@ -1,23 +1,26 @@
-
 import { useState } from "react";
 import LandingPage from "./LandingPage";
 import Dashboard from "./Dashboard";
 import AuthModal from "../components/AuthModal";
+import useSecureAuth from "../hooks/useSecureAuth";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const Index = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useSecureAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "signup" | "verify">("login");
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    setIsAuthModalOpen(false);
-  };
-
-  const handleSignup = () => {
-    setIsAuthenticated(true);
-    setIsAuthModalOpen(false);
-  };
+  let title = "Landing";
+  if (isAuthenticated) {
+    title = "Dashboard";
+  } else if (isAuthModalOpen) {
+    if (authMode === "login") {
+      title = "Login";
+    } else if (authMode === "signup") {
+      title = "Signup";
+    }
+  }
+  useDocumentTitle(title);
 
   const openLoginModal = () => {
     setAuthMode("login");
@@ -38,15 +41,12 @@ const Index = () => {
       <LandingPage 
         onLoginClick={openLoginModal}
         onSignupClick={openSignupModal}
-        onSignup={handleSignup}
       />
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         mode={authMode}
         onModeChange={setAuthMode}
-        onSignup={handleSignup}
-        onLogin={handleLogin}
       />
     </>
   );

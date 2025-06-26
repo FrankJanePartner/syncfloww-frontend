@@ -1,25 +1,37 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+import { useNavigate } from "react-router-dom";
+
+import useSecureAuth from "../hooks/useSecureAuth";
 
 interface LoginPageProps {
-  onLogin?: () => void;
   onSignupClick?: () => void;
 }
 
-const LoginPage = ({ onLogin, onSignupClick }: LoginPageProps) => {
+const LoginPage = ({ onSignupClick }: LoginPageProps) => {
+  useDocumentTitle("Login");
+
+  const { login } = useSecureAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Login attempt:", { email, password, rememberMe });
-    // Simulate successful login
-    onLogin?.();
+    const result = await login({ email, password });
+    if (result.success) {
+      navigate('/dashboard');
+    } else {
+      alert("Login failed: " + (result.error || "Unknown error"));
+    }
   };
 
   return (

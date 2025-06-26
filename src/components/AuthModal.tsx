@@ -2,15 +2,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import VoiceRecorder from "./VoiceRecorder";
 import PasswordReset from "./PasswordReset";
 import SecureForm from "./SecureForm";
 import { loginSchema, signupSchema } from "@/lib/validation";
-import { useSecureAuth } from "@/hooks/useSecureAuth";
+import useSecureAuth from "@/hooks/useSecureAuth";
 import { z } from "zod";
+import { buildApiUrl, API_CONFIG } from "@/lib/api";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -44,18 +45,49 @@ const AuthModal = ({ isOpen, onClose, mode, onModeChange, onSignup, onLogin }: A
   const handleSignupSubmit = async (data: SignupFormData) => {
     const result = await signup({
       email: data.email,
-      password: data.password,
-      firstName: data.firstName,
-      lastName: data.lastName
+      password1: data.password,
+      password2: data.confirmPassword,
+      first_name: data.firstName,
+      last_name: data.lastName
     });
-    if (result.success) {
-      onModeChange("verify");
+
+    if (!result.success) {
+      console.error("Signup error:", result);
+      alert("Signup failed. Check the console for details.");
+      return;
     }
+
+    onModeChange("verify");
   };
 
-  const handleVerifyDone = () => {
-    onSignup?.();
-    onClose();
+  const handleVerifyDone = async () => {
+    try {
+      // Call backend to check if user is active (verified)
+      const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.USER), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // Include auth token if needed
+        },
+        credentials: 'include' // to send cookies if backend uses session auth
+      });
+
+      if (!response.ok) {
+        throw new Error('Verification check failed');
+      }
+
+      const data = await response.json();
+
+      if (data.is_active) {
+        onSignup?.();
+        onClose();
+      } else {
+        alert('Your email is not verified yet. Please verify before proceeding.');
+      }
+    } catch (error) {
+      console.error('Verification check error:', error);
+      alert('Error checking verification status. Please try again later.');
+    }
   };
 
   const handleVoiceRecording = (audioBlob: Blob) => {
@@ -134,18 +166,33 @@ const AuthModal = ({ isOpen, onClose, mode, onModeChange, onSignup, onLogin }: A
         <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
       </div>
 
-      <SecureForm
-        schema={signupSchema}
-        onSubmit={handleSignupSubmit}
-        fields={[
-          { name: 'firstName', label: 'First Name', placeholder: 'First Name' },
-          { name: 'lastName', label: 'Last Name', placeholder: 'Last Name' },
-          { name: 'email', label: 'Email', type: 'email', placeholder: 'Email Address' },
-          { name: 'password', label: 'Password', type: 'password', placeholder: 'Password' },
-          { name: 'confirmPassword', label: 'Confirm Password', type: 'password', placeholder: 'Confirm Password' }
-        ]}
-        submitText="Create account"
-      />
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+        <div className="flex space-x-4">
+          <div className="flex-1">
+            <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">First Name</Label>
+            <Input id="firstName" name="firstName" placeholder="First Name" />
+          </div>
+          <div className="flex-1">
+            <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">Last Name</Label>
+            <Input id="lastName" name="lastName" placeholder="Last Name" />
+          </div>
+        </div>
+        <div>
+          <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
+          <Input id="email" name="email" type="email" placeholder="Email Address" />
+        </div>
+        <div>
+          <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
+          <Input id="password" name="password" type="password" placeholder="Password" />
+        </div>
+        <div>
+          <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">Confirm Password</Label>
+          <Input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" />
+        </div>
+        <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-full font-semibold">
+          Create account
+        </Button>
+      </form>
 
       <div className="flex justify-center space-x-4">
         <Button variant="outline" size="icon" className="rounded-full border-2">
@@ -195,22 +242,30 @@ const AuthModal = ({ isOpen, onClose, mode, onModeChange, onSignup, onLogin }: A
   return (
     <>
       <Dialog open={isOpen && !showPasswordReset} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-4"
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-          
-          <div className="p-6">
-            {mode === "login" && renderLoginForm()}
-            {mode === "signup" && renderSignupForm()}
-            {mode === "verify" && renderVerifyForm()}
-          </div>
-        </DialogContent>
+      <DialogContent className="sm:max-w-md" aria-describedby="auth-dialog-description">
+        <DialogTitle className="sr-only">Authentication Dialog</DialogTitle>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-4 top-4"
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+        
+        <div className="p-6" id="auth-dialog-description">
+          {mode === "login" && renderLoginForm()}
+          {mode === "signup" && (
+            <>
+              <div className="text-center mb-6">
+                <DialogDescription>Enter your credentials to access your account.</DialogDescription>
+              </div>
+              {renderSignupForm()}
+            </>
+          )}
+          {mode === "verify" && renderVerifyForm()}
+        </div>
+      </DialogContent>
       </Dialog>
 
       <PasswordReset
