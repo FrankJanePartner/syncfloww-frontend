@@ -2,7 +2,7 @@
 
 // API configuration using environment variables
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://syncflow.pythonanywhere.com/',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://syncflow-frontend-production.up.railway.app/',
   ENDPOINTS: {
     USER: '/accounts/auth/user/',
     AUTH: {
