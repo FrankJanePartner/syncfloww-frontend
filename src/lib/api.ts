@@ -2,15 +2,15 @@
 
 // API configuration using environment variables
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://syncflow-frontend-production.up.railway.app/',
+  BASE_URL: import.meta.env.API_BASE_URL || 'http://localhost:8000/api/',
   ENDPOINTS: {
-    USER: '/accounts/auth/user/',
+    USER: 'accounts/auth/user/',
     AUTH: {
-      LOGIN: '/accounts/auth/login/',
-      SIGNUP: '/accounts/auth/register/',
-      FORGOT_PASSWORD: '/accounts/auth/forgot-password/',
-      RESET_PASSWORD: '/accounts/auth/reset-password/',
-      VERIFY_EMAIL: '/accounts/auth/verify-email/'
+      LOGIN: 'accounts/auth/login/',
+      SIGNUP: 'accounts/auth/register/',
+      FORGOT_PASSWORD: 'accounts/auth/forgot-password/',
+      RESET_PASSWORD: 'accounts/auth/reset-password/',
+      VERIFY_EMAIL: 'accounts/auth/verify-email/'
     },
     POSTS: {
       CREATE: '/posts',

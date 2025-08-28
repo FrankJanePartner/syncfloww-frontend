@@ -36,8 +36,13 @@ const SecureForm: React.FC<SecureFormProps> = ({
 
   const form = useForm({
     resolver: zodResolver(schema),
-    mode: 'onChange'
+    mode: 'onChange',
+    defaultValues: fields.reduce((acc, field) => {
+      acc[field.name] = ""; // ensure controlled inputs
+      return acc;
+    }, {} as Record<string, string>),
   });
+
 
   const handleSubmit = async (data: any) => {
     // Rate limiting check

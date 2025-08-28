@@ -11,7 +11,7 @@ import SecureForm from "./SecureForm";
 import { loginSchema, signupSchema } from "@/lib/validation";
 import useSecureAuth from "@/hooks/useSecureAuth";
 import { z } from "zod";
-import { buildApiUrl, API_CONFIG } from "@/lib/api";
+import { API_CONFIG, buildApiUrl } from "@/lib/api";
 
 interface AuthModalProps {
   isOpen: boolean;

@@ -18,6 +18,10 @@ const LandingPage = ({ onLoginClick, onSignupClick, onSignup }: LandingPageProps
     setShowAuthModal(false);
   };
 
+  const handleTryDemo = () => {
+    window.open('http://localhost:8000/api/guest_demo', '_blank');
+  };
+
   const features = [
     {
       icon: "🤖",
@@ -76,12 +80,22 @@ const LandingPage = ({ onLoginClick, onSignupClick, onSignup }: LandingPageProps
               <p className="text-xl text-gray-600 leading-relaxed">
                 Automate your marketing tasks, Optimize your content, and analyze your performance with AI-powered tools.
               </p>
-              <Button 
-                onClick={onSignupClick}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  onClick={onSignupClick}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
-              >
-                Get Started
-              </Button>
+                >
+                  Get Started
+                </Button>
+                <Button 
+                  onClick={handleTryDemo}
+                  variant="outline"
+                  size="lg"
+                  className="px-8 py-4 text-lg rounded-full font-semibold border-2 hover:bg-primary/10"
+                >
+                  Try Demo
+                </Button>
+              </div>
             </div>
             <div className="relative">
               <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl p-8 shadow-2xl">
