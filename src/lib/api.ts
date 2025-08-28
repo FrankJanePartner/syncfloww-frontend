@@ -2,7 +2,7 @@
 
 // API configuration using environment variables
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.API_BASE_URL || 'http://localhost:8000/api/',
+  BASE_URL: import.meta.env.API_BASE_URL || 'https://syncfloww-backend-w4pw.onrender.com/',
   ENDPOINTS: {
     USER: 'accounts/auth/user/',
     AUTH: {
