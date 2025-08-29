@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { secureStorage } from '@/lib/security';
+import { API_CONFIG, buildApiUrl } from '@/lib/api';
 
 interface User {
   id: string;
@@ -45,17 +46,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (credentials: { email: string; password: string }) => {
     try {
-      console.log('Login attempt with secure practices:', credentials.email);
-      const mockUser = { id: '1', email: credentials.email, name: 'User' };
-      const mockToken = 'secure_jwt_token';
+      const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.LOGIN), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
 
-      secureStorage.setItem('auth_token', mockToken);
-      secureStorage.setItem('user', JSON.stringify(mockUser));
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.detail || 'Login failed' };
+      }
+
+      const data = await response.json();
+      const { access, user } = data;
+
+      secureStorage.setItem('auth_token', access);
+      secureStorage.setItem('user', JSON.stringify(user));
 
       setAuthState({
         isAuthenticated: true,
-        user: mockUser,
-        token: mockToken,
+        user,
+        token: access,
       });
 
       return { success: true };
@@ -77,8 +90,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signup = async (userData: { email: string; password1: string; password2: string; first_name: string; last_name: string }) => {
     try {
-      console.log('Signup attempt with secure practices:', userData.email);
-      // Implement real signup API call here
+      const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.SIGNUP), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.detail || 'Signup failed' };
+      }
+
       return { success: true };
     } catch (error) {
       console.error('Signup error:', error);

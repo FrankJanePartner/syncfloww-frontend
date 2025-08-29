@@ -1,8 +1,6 @@
-
-
 // API configuration using environment variables
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.API_BASE_URL || 'https://syncfloww-backend-w4pw.onrender.com/',
+  BASE_URL: import.meta.env.API_BASE_URL || 'http://127.0.0.1:8000/',
   ENDPOINTS: {
     USER: 'accounts/auth/user/',
     AUTH: {
@@ -56,4 +54,3 @@ export const buildApiUrl = (endpoint: string, params?: Record<string, string>) =
 // Example usage:
 // buildApiUrl(API_CONFIG.ENDPOINTS.POSTS.UPDATE, { id: '123' })
 // Results in: https://api.syncflow.com/posts/123
-
