@@ -9,6 +9,13 @@ export const API_CONFIG = {
       RESET_PASSWORD: 'auth/reset-password/',
       VERIFY_EMAIL: 'auth/verify-email/'
     },
+    BRANDS: {
+      CREATE: 'brands/',
+      DETAILS: 'brands/{id}/',
+      UPDATE: 'brands/{id}/',
+      DELETE: 'brands/{id}/',
+      LIST: 'brands/'
+    },
     POSTS: {
       CREATE: '/posts',
       LIST: '/posts',
