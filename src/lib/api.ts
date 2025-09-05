@@ -1,13 +1,13 @@
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.API_BASE_URL || 'http://localhost:8000/',
+  BASE_URL: import.meta.env.API_BASE_URL || 'https://syncfloww.onrender.com/api/',
   ENDPOINTS: {
-    USER: 'accounts/auth/user/',
+    USER: 'auth/user/',
     AUTH: {
-      LOGIN: 'accounts/auth/login/',
-      SIGNUP: 'accounts/auth/register/',
-      FORGOT_PASSWORD: 'accounts/auth/forgot-password/',
-      RESET_PASSWORD: 'accounts/auth/reset-password/',
-      VERIFY_EMAIL: 'accounts/auth/verify-email/'
+      LOGIN: 'auth/login/',
+      SIGNUP: 'auth/register/',
+      FORGOT_PASSWORD: 'auth/forgot-password/',
+      RESET_PASSWORD: 'auth/reset-password/',
+      VERIFY_EMAIL: 'auth/verify-email/'
     },
     POSTS: {
       CREATE: '/posts',
